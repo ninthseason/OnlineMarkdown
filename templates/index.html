@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{# by Kl1nge5 #}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>在线Markdown</title>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/showdown@1.9.0/dist/showdown.min.js"></script>
+  <style>
+    .submitDiv:hover {
+    background: black;
+    color: white;
+}
+
+    .submitDiv {
+        display: inline-flex;
+        width: auto;
+        border: black solid;
+        transition: 50ms;
+        user-select: none;
+        cursor: pointer;
+        border-radius: 5px;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+}
+  </style>
+</head>
+<body>
+
+<div class="WriteAreaDiv">
+  <textarea rows="10" cols="30" class="WriteArea" onchange="generator()">{{ markdowntext }}</textarea>
+</div>
+<div class="submitDiv" onclick="submitChange()">&nbsp;提交&nbsp;</div>
+<div class="MarkdownArea"></div>
+
+<script>
+    var converter = new showdown.Converter();
+    text = "{{ markdowntext }}";
+    console.log(text)
+    html = converter.makeHtml(text);
+    document.getElementsByClassName("MarkdownArea")[0].innerHTML = html;
+
+    function generator() {
+      console.log("输入区更新")
+      text = document.getElementsByClassName("WriteArea")[0].value;
+      html = converter.makeHtml(text);
+      document.getElementsByClassName("MarkdownArea")[0].innerHTML = html;
+    }
+
+    function submitChange() {
+        console.log("提交更改")
+        var GetVerification = prompt("请输入验证码:")
+        var url = '{{ url_for("upload") }}';
+        var request = new XMLHttpRequest();
+        var form = new FormData();
+        form.append("text", document.getElementsByClassName("WriteArea")[0].value)
+        form.append("verification", GetVerification)
+        request.open("post", url)
+        request.send(form)
+    }
+</script>
+
+</body>
+</html>
