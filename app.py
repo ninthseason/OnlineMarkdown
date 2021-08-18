@@ -14,10 +14,11 @@ def hello_world():
 @app.route('/upload', methods=['POST'])
 def upload():
     if request.method == "POST":
-        text = request.form.get("text")
+        text = request.form.get("text").strip()
         verification = request.form.get("verification")
         if verification == "1346":
             with open("static/text.md", 'w', encoding='utf-8') as f:
+                print(text)
                 f.write(text)
     return "0"
 
