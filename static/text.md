@@ -1,49 +1,26 @@
-# 定点小数 8位带符号计算机 能表示的最大正数和最大负数
+# Unity2D开发指北 实现角色跳跃
 
-## 定点小数
+由于刚体本身受重力影响，我们只要给角色一个向上的初始速度，就能实现平滑的跳跃
 
-**区别于浮点数**，**小数点位置固定，且固定在最高位前面**
+若玩家按下跳跃键且角色处于地面上，则给予一个向上的速度
 
-如：
+```c#
+// Jump()代码每帧调用
+private void Jump()
+{
+    if (!(Input.GetButton("Jump") && IsGround())) return;// 若未按下键就不判断是否在地面了，减少运算量
+    _playerBody.velocity = new Vector2(_playerBody.velocity.x, jumpHeight);
 
-```Shell
-0	符号位，表示正数
-	此处隐藏着小数点
-0	位权2^-1
-0	位权2^-2
-0	位权2^-3
-0	位权2^-4
-0	位权2^-5
-0	位权2^-6
-1	位权2^-7
+}
+
+private bool IsGround()
+{
+    return _playerColliderBox.IsTouchingLayers(LayerMask.GetMask("Ground"));
+}
 ```
 
+注意：
 
+- `GetButton()`检测按键是否在按下状态，`GetButtonDown()`和`GetButtonUp()`则是检测按键从弹起到按下（以及反之）的状态变化
 
-## 最大正数
-
-正数，符号位为0，剩下七位表示数值
-
-最大正数即为`0 1 1 1 1 1 1 1`
-
-符号位后隐藏着小数点，所以数值部分位权从左到右分别为：2<sup>-1</sup>，2<sup>-2</sup>，2<sup>-3</sup>，2<sup>-4</sup>，2<sup>-5</sup>，2<sup>-6</sup>，2<sup>-7</sup>
-
-求得十进制：
-$$
-1\times2^{-1}+1\times2^{-2}+1\times2^{-3}+1\times2^{-4}+1\times2^{-5}+1\times2^{-6}+1\times2^{-7}
-$$
-由等差数列求和公式化简为：
-$$
-原式=2^{-1}\times\frac{1-2^{-7}}{1-2^{-1}}=1-2^{-7}
-$$
-得最大正数 1-2<sup>-7</sup>
-
-## 最大负数
-
-由最小正数转换为负数得到
-
-最小正数：`0 0 0 0 0 0 0 1`
-
-即为十进制的 2<sup>-7</sup>，其负数为 -2<sup>-7</sup>
-
-得最大负数为 -2<sup>-7</sup>
+  所以，前者可以实现按住空格连跳，后两者则不行

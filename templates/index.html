@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <title>在线Markdown</title>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/showdown@1.9.0/dist/showdown.min.js"></script>
-  <script src="../static/lib/jquery-3.6.0.js"></script>
+{#  <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}">#}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/markdown.css') }}">
   <style>
       .submitDiv:hover {
           background: black;
@@ -14,26 +15,29 @@
 
       .submitDiv {
           display: inline-flex;
-          width: auto;
-          border: black solid;
+          width: 50px;
+          height: 25px;
+          border: black solid 1px;
           transition: 50ms;
           user-select: none;
           cursor: pointer;
           border-radius: 5px;
-          align-content: center;
           justify-content: center;
           align-items: center;
       }
   </style>
 </head>
-<body>
+<body style="margin: 0 20%">
 
 <div class="WriteAreaDiv">
-  <textarea rows="10" cols="30" class="WriteArea" onchange="generator()">{{ markdowntext }}</textarea>
+  <label>
+    <textarea rows="10" cols="30" class="WriteArea" onchange="generator()" style="width: 100%;resize: vertical;">{{ markdowntext }}</textarea>
+  </label>
 </div>
 <div class="submitDiv" onclick="submitChange()">&nbsp;提交&nbsp;</div>
 <div class="MarkdownArea"></div>
 
+<script src="{{ url_for('static', filename='lib/jquery-3.6.0.js') }}"></script>
 <script>
     let converter = new showdown.Converter(); // 先创建好一个生成器，以后要一直用
 
@@ -56,10 +60,22 @@
         request.send(form);
     }
 
-    // 页面加载完先生成一遍markdown
+    // 页面加载完毕后执行
     $(function () {
+        // 先生成一遍markdown
         generator();
+
+        // 给所有独立代码（不在代码块中）加上样式
+        for (const converterElement of $('code')) {
+            if (converterElement.attributes.length === 0) {
+                $(converterElement).css({'background': '#f1f1f1',
+                    'border': '#d9d9d9 solid 1px',
+                    'border-radius':  '4px'});
+            }
+        }
     })
+
+
 </script>
 
 </body>

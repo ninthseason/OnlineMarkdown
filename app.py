@@ -24,6 +24,7 @@ def upload():
 
 
 if __name__ == '__main__':
+    # print(app.config)
     app.run(debug=True)
     # http_server = WSGIServer(('0.0.0.0', 5000), app)   # 配置WSGI
     # http_server.serve_forever()   # 启动服务器
