@@ -8,12 +8,12 @@
 {#  <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}">#}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/markdown.css') }}">
   <style>
-      .submitDiv:hover {
+      .ButtonDiv:hover {
           background: black;
           color: white;
       }
 
-      .submitDiv {
+      .ButtonDiv {
           display: inline-flex;
           width: 50px;
           height: 25px;
@@ -34,7 +34,10 @@
     <textarea rows="10" cols="30" class="WriteArea" onchange="generator()" style="width: 100%;resize: vertical;">{{ markdowntext }}</textarea>
   </label>
 </div>
-<div class="submitDiv" onclick="submitChange()">&nbsp;提交&nbsp;</div>
+<div>
+  <div class="ButtonDiv" onclick="submitChange()">&nbsp;提交&nbsp;</div>
+  <div class="ButtonDiv" onclick="copy()" style="float: right;">&nbsp;复制&nbsp;</div>
+</div>
 <div class="MarkdownArea"></div>
 
 <script src="{{ url_for('static', filename='lib/jquery-3.6.0.js') }}"></script>
@@ -58,6 +61,16 @@
         form.append("verification", GetVerification);
         request.open("post", url);
         request.send(form);
+    }
+
+    // 复制markdown文本
+    function copy() {
+        let text = $('textarea');
+        text.select();
+        document.execCommand('copy');
+        getSelection().removeAllRanges();
+        text.blur();
+        alert('复制成功')
     }
 
     // 页面加载完毕后执行

@@ -13,3 +13,10 @@ code {
     font-family: var(--monospace);
     line-height: 1.6;
 }
+
+blockquote {
+    border-left: 4px solid #6a6a6a;
+    padding: 0 15px;
+    color: #777777;
+    margin-left: 0;
+}
