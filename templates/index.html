@@ -5,24 +5,25 @@
   <meta charset="UTF-8">
   <title>在线Markdown</title>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/showdown@1.9.0/dist/showdown.min.js"></script>
+  <script src="../static/lib/jquery-3.6.0.js"></script>
   <style>
-    .submitDiv:hover {
-    background: black;
-    color: white;
-}
+      .submitDiv:hover {
+          background: black;
+          color: white;
+      }
 
-    .submitDiv {
-        display: inline-flex;
-        width: auto;
-        border: black solid;
-        transition: 50ms;
-        user-select: none;
-        cursor: pointer;
-        border-radius: 5px;
-        align-content: center;
-        justify-content: center;
-        align-items: center;
-}
+      .submitDiv {
+          display: inline-flex;
+          width: auto;
+          border: black solid;
+          transition: 50ms;
+          user-select: none;
+          cursor: pointer;
+          border-radius: 5px;
+          align-content: center;
+          justify-content: center;
+          align-items: center;
+      }
   </style>
 </head>
 <body>
@@ -34,30 +35,31 @@
 <div class="MarkdownArea"></div>
 
 <script>
-    var converter = new showdown.Converter();
-    text = "{{ markdowntext }}";
-    console.log(text)
-    html = converter.makeHtml(text);
-    document.getElementsByClassName("MarkdownArea")[0].innerHTML = html;
+    let converter = new showdown.Converter(); // 先创建好一个生成器，以后要一直用
 
+    // 生成markdown
     function generator() {
-      console.log("输入区更新")
-      text = document.getElementsByClassName("WriteArea")[0].value;
-      html = converter.makeHtml(text);
-      document.getElementsByClassName("MarkdownArea")[0].innerHTML = html;
+        let text = document.getElementsByClassName("WriteArea")[0].value; // 获取输入区的文本
+        document.getElementsByClassName("MarkdownArea")[0].innerHTML = converter.makeHtml(text);  // 交给生成器处理再赋值
     }
 
+    // 提交更改
     function submitChange() {
-        console.log("提交更改")
-        var GetVerification = prompt("请输入验证码:")
-        var url = '{{ url_for("upload") }}';
-        var request = new XMLHttpRequest();
-        var form = new FormData();
-        form.append("text", document.getElementsByClassName("WriteArea")[0].value)
-        form.append("verification", GetVerification)
-        request.open("post", url)
-        request.send(form)
+        console.log("提交更改");
+        let GetVerification = prompt("请输入验证码:");
+        let url = '{{ url_for("upload") }}';
+        let request = new XMLHttpRequest();
+        let form = new FormData();
+        form.append("text", document.getElementsByClassName("WriteArea")[0].value);
+        form.append("verification", GetVerification);
+        request.open("post", url);
+        request.send(form);
     }
+
+    // 页面加载完先生成一遍markdown
+    $(function () {
+        generator();
+    })
 </script>
 
 </body>
